@@ -36,4 +36,22 @@ public class ItemController {
         //Convertendo Entidade em dto seguro
         return new ItemResponseDTO(itemSalvo);
     }
+
+    @PutMapping("/{id}")
+    public ItemResponseDTO atualiazr(@PathVariable Long id, //Capturando ID da url
+                                     @Valid @RequestBody ItemRequestDTO dto, //Captura JSON com dados novos
+                                     @AuthenticationPrincipal User usuarioLogado //Captura quem esta logado pelo token
+    ){
+        Item itemAtualizado = itemService.atualizar(id, dto, usuarioLogado);
+        return  new ItemResponseDTO(itemAtualizado);
+    }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT) //retorna status 204
+    public void deletar(
+            @PathVariable Long id,
+            @AuthenticationPrincipal User usarioLogado
+    ){
+        itemService.deletar(id, usarioLogado);
+    }
 }
