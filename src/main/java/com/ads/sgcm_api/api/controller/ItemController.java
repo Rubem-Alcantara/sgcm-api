@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/itens")
@@ -46,8 +48,19 @@ public class ItemController {
         return  new ItemResponseDTO(itemAtualizado);
     }
 
-    @DeleteMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT) //retorna status 204
+    @GetMapping
+    public List<ItemResponseDTO> listarTodos() {
+        // Busca a lista de entidades no banco
+        List<Item> itens = itemService.listarTodos();
+
+        // Converte a lista de 'Item' para 'ItemResponseDTO' por segurança
+        return itens.stream()
+                .map(ItemResponseDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(
             @PathVariable Long id,
             @AuthenticationPrincipal User usarioLogado

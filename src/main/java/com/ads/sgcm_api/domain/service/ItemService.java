@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class ItemService {
 
@@ -63,5 +65,9 @@ public class ItemService {
         if (!isDonoDoItem && !isAdmin){
             throw new RuntimeException("Acesso negado: Você não tem permissão para modificar este item.");
         }
+    }
+
+    public List<Item> listarTodos() {
+        return itemRepository.findAll();
     }
 }
