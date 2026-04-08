@@ -93,4 +93,12 @@ public class ItemService {
             throw new RuntimeException("Acesso negado: Você não tem permissão para modificar este item.");
         }
     }
+
+    public List<Item> buscarPorDescricao(String termoBusca) {
+        // Se o usuario limpar a barra de pesquisa, retornamos tudo
+        if (termoBusca == null || termoBusca.trim().isEmpty()) {
+            return listarTodos();
+        }
+        return itemRepository.findByDescricaoContainingIgnoreCase(termoBusca);
+    }
 }

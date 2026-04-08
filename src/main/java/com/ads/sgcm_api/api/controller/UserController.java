@@ -10,6 +10,7 @@ import com.ads.sgcm_api.infra.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal; // <-- Importação adicionada
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -45,5 +46,10 @@ public class UserController {
         User user = userService.autenticar(loginRequest.getEmail(), loginRequest.getSenha());
         String token = tokenService.generateToken(user);
         return new LoginResponse(token);
+    }
+
+    @GetMapping("/me")
+    public UserResponseDTO obterDadosDoUsuarioLogado(@AuthenticationPrincipal User usuarioLogado) {
+        return new UserResponseDTO(usuarioLogado);
     }
 }

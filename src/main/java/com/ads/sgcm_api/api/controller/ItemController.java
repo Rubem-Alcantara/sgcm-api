@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/itens")
@@ -66,5 +67,17 @@ public class ItemController {
             @AuthenticationPrincipal User usarioLogado
     ){
         itemService.deletar(id, usarioLogado);
+    }
+
+    @GetMapping("/busca")
+    public List<ItemResponseDTO> buscarItens(@RequestParam String termo) {
+
+        // Chamando o Service e passando a palavra digitada
+        List<Item> itensEncontrados = itemService.buscarPorDescricao(termo);
+
+        // Convertendo a lista de Entidades para a lista de DTOs seguros
+        return itensEncontrados.stream()
+                .map(ItemResponseDTO::new)
+                .toList();
     }
 }
