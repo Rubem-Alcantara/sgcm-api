@@ -39,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/usuarios").permitAll() // cadastro é publico.
                         .requestMatchers(HttpMethod.POST, "/usuarios/login").permitAll() //Login publico
                         .requestMatchers("/error").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated() // Qualquer outra rota pede token
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class) // Colocando filtro antes do spring
