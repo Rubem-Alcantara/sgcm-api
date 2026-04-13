@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   db:
     image: postgres:15
@@ -11,6 +13,24 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+  api:
+    build: .
+    container_name: sgcm-api
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    environment:
+      # Conexão com o banco de dados apontando para o serviço 'db' acima
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/sgcm_db
+      - SPRING_DATASOURCE_USERNAME=ads_user
+      - SPRING_DATASOURCE_PASSWORD=ads_password
+
+      # Variáveis de Segurança do AdminSeeder (A Mágica!)
+      - ADMIN_EMAIL=admin@sgcm.com
+      - ADMIN_PASSWORD=SenhaForte123!
 
 volumes:
   pgdata:
