@@ -9,9 +9,18 @@ public record UserResponseDTO (
         String nome,
         String email,
         UserRole role,
-        UserStatus status 
+        UserStatus status,
+        Boolean senhaProvisoria
 ){
     public UserResponseDTO(User user){
-        this(user.getId(), user.getNome(), user.getEmail(), user.getRole(), user.getStatus());
+        this(
+                user.getId(),
+                user.getNome(),
+                user.getEmail(),
+                user.getRole(),
+                user.getStatus(),
+                // Se for null no banco de dados, o React recebe false
+                user.getSenhaProvisoria() != null ? user.getSenhaProvisoria() : false
+        );
     }
 }

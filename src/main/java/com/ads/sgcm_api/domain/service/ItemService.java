@@ -50,7 +50,7 @@ public class ItemService {
     }
 
     public List<Item> listarTodos() {
-        return itemRepository.findAll();
+        return itemRepository.findAllComUsuario();
     }
 
     public Item buscarPorId(Long id) {
@@ -95,10 +95,10 @@ public class ItemService {
     }
 
     public List<Item> buscarPorDescricao(String termoBusca) {
-        // Se o usuario limpar a barra de pesquisa, retornamos tudo
         if (termoBusca == null || termoBusca.trim().isEmpty()) {
             return listarTodos();
         }
-        return itemRepository.findByDescricaoContainingIgnoreCase(termoBusca);
+
+        return itemRepository.findByDescricaoComUsuario(termoBusca);
     }
 }

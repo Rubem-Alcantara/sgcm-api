@@ -58,7 +58,7 @@ public class MovimentacaoService {
     }
 
     public List<Movimentacao> listarTodas() {
-        // Retorna todas as movimentações ordenadas pela data mais recente (DESC)
-        return movimentacaoRepository.findAll(Sort.by(Sort.Direction.DESC, "data"));
+        // Usa a consulta otimizada para evitar erro 500
+        return movimentacaoRepository.findAllComTudo();
     }
 }

@@ -19,7 +19,6 @@ public class AdminSeeder implements CommandLineRunner {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // Puxando os valores do application.properties
     @Value("${api.security.admin.email}")
     private String adminEmail;
 
@@ -28,18 +27,22 @@ public class AdminSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Verifica se já existe o admin mestre usando o e-mail dinâmico
-        if (userRepository.findByEmail(adminEmail).isEmpty()) {
+        // Busca o admin ou cria um novo se não existir
+        User admin = userRepository.findByEmail(adminEmail).orElse(new User());
 
-            User admin = new User();
-            admin.setNome("Administrador do Sistema");
-            admin.setEmail(adminEmail); // Usa a variável
-            admin.setSenha(passwordEncoder.encode(adminSenha)); // Usa a variável criptografada
-            admin.setRole(UserRole.ADMIN);
-            admin.setStatus(UserStatus.ATIVO);
+        admin.setNome("Administrador do Sistema");
+        admin.setEmail(adminEmail);
 
-            userRepository.save(admin);
-            System.out.println("✅ Administrador Mestre criado com sucesso! Email: " + adminEmail);
+        // Só gera o hash da senha se a conta for totalmente nova
+        if (admin.getId() == null) {
+            admin.setSenha(passwordEncoder.encode(adminSenha));
         }
+        admin.setRole(UserRole.ADMIN);
+        admin.setStatus(UserStatus.ATIVO);
+        admin.setSenhaProvisoria(false);
+
+        userRepository.save(admin);
+
+        System.out.println("✅ Administrador Mestre verificado e restaurado com sucesso! Email: " + adminEmail);
     }
 }

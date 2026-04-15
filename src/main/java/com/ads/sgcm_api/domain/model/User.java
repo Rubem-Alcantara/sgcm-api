@@ -31,7 +31,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    // Controla o acesso do usuário
     @Enumerated(EnumType.STRING)
     private UserStatus status = UserStatus.PENDENTE;
+
+    @Column(name = "senha_provisoria")
+    private Boolean senhaProvisoria = false;
 }

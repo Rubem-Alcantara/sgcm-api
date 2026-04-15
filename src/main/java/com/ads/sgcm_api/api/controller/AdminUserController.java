@@ -28,22 +28,20 @@ public class AdminUserController {
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<Void> alterarStatus(
-            @PathVariable Long id,
-            @RequestParam UserStatus status,
-            @AuthenticationPrincipal User adminLogado) {
-
+    public ResponseEntity<Void> alterarStatus(@PathVariable Long id, @RequestParam UserStatus status, @AuthenticationPrincipal User adminLogado) {
         userService.alterarStatus(id, status, adminLogado);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}/role")
-    public ResponseEntity<Void> alterarRole(
-            @PathVariable Long id,
-            @RequestParam UserRole role,
-            @AuthenticationPrincipal User adminLogado) {
-
-        userService.alterarRole(id, role, adminLogado);
+    @PutMapping("/{id}/reset-senha")
+    public ResponseEntity<Void> resetarSenha(@PathVariable Long id, @AuthenticationPrincipal User adminLogado) {
+        userService.resetarSenha(id, adminLogado);
         return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluirUsuario(@PathVariable Long id, @AuthenticationPrincipal User adminLogado) {
+        userService.excluirUsuario(id, adminLogado);
+        return ResponseEntity.noContent().build();
     }
 }

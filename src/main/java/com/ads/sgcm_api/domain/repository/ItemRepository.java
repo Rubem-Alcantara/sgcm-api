@@ -3,6 +3,7 @@ package com.ads.sgcm_api.domain.repository;
 import com.ads.sgcm_api.domain.model.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,12 +12,18 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item, Long> {
     boolean existsByDescricaoIgnoreCase(String descricao);
 
-    // Somando a coluna 'quantidade' de todos os itens. Se não tiver nada, retorna 0
     @Query("SELECT COALESCE(SUM(i.quantidade), 0) FROM Item i")
     Long somarTotalEstoque();
 
-    // Contando quantos itens possuem a quantidade menor ou igual a um valor específico
     Long countByQuantidadeLessThanEqual(Integer quantidade);
 
-    List<Item> findByDescricaoContainingIgnoreCase(String termoBusca);
+    // ==========================================
+    // SOLUÇÃO PRO: Consultas com JOIN FETCH
+    // Traz o Item e o Usuário dono dele na mesma viagem ao banco!
+    // ==========================================
+    @Query("SELECT i FROM Item i JOIN FETCH i.usuario")
+    List<Item> findAllComUsuario();
+
+    @Query("SELECT i FROM Item i JOIN FETCH i.usuario WHERE LOWER(i.descricao) LIKE LOWER(CONCAT('%', :termoBusca, '%'))")
+    List<Item> findByDescricaoComUsuario(@Param("termoBusca") String termoBusca);
 }
