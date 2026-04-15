@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
@@ -26,4 +27,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     @Query("SELECT i FROM Item i JOIN FETCH i.usuario WHERE LOWER(i.descricao) LIKE LOWER(CONCAT('%', :termoBusca, '%'))")
     List<Item> findByDescricaoComUsuario(@Param("termoBusca") String termoBusca);
+
+    @Query("SELECT i FROM Item i JOIN FETCH i.usuario WHERE i.id = :id")
+    Optional<Item> findByIdComUsuario(@Param("id") Long id);
 }

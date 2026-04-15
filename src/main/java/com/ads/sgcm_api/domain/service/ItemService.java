@@ -54,7 +54,7 @@ public class ItemService {
     }
 
     public Item buscarPorId(Long id) {
-        return itemRepository.findById(id)
+        return itemRepository.findByIdComUsuario(id)
                 .orElseThrow(() -> new RuntimeException("Item não encontrado"));
     }
 
